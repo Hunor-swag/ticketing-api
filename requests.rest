@@ -1,0 +1,24 @@
+POST http://localhost:3001/auth/customer/signin
+Content-Type: application/json
+
+{
+	"email": "asd@asd.com",
+	"password": "asdfasdf"
+}
+
+###
+
+GET http://localhost:3001/customers
+
+###
+
+POST http://localhost:3001/auth/customer/signup
+Content-Type: application/json
+
+{
+	"email": "asd@asd.com",
+	"password": "asdfasdf",
+	"repeat_password": "asdfasdf",
+	"firstname": "asd",
+	"lastname": "asd"
+}
