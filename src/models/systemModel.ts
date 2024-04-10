@@ -22,6 +22,8 @@ async function create(system: System): Promise<any> {
       ]
     );
 
+    console.log('hi');
+
     const dumpResults = (await query(
       'ticketing_schema',
       'SHOW CREATE DATABASE ticketing_schema',
