@@ -3,6 +3,7 @@ import { query } from '../config/database';
 import { exec } from 'child_process';
 import fs from 'fs';
 import { promisify } from 'util';
+import { RowDataPacket } from 'mysql2';
 
 const execAsync = promisify(exec);
 
@@ -21,24 +22,19 @@ async function create(system: System): Promise<any> {
       ]
     );
 
-    const dumpFilename = 'dump.sql';
-
-    await query(
+    const dumpResults = (await query(
       'ticketing_schema',
-      `SELECT * FROM information_schema.tables WHERE table_schema = 'ticketing_schema' INTO OUTFILE '${dumpFilename}'`,
+      'SHOW CREATE DATABASE ticketing_schema',
       []
-    );
+    )) as RowDataPacket[];
+    const createDatabaseQuery = dumpResults[0]['Create Database'];
+    const dumpSql = `USE ticketing_schema; ${createDatabaseQuery};`;
 
-    await query(
-      'ticketing_schema',
-      `CREATE DATABASE IF NOT EXISTS ${system.db_name}`,
-      []
-    );
+    // Create the new database for the system
+    await query('', `CREATE DATABASE IF NOT EXISTS ${system.db_name}`, []);
 
-    const sql = fs.readFileSync(dumpFilename, 'utf-8');
-    await query(system.db_name, sql, []);
-
-    fs.unlinkSync(dumpFilename);
+    // Import the SQL dump into the new database
+    await query(system.db_name, dumpSql, []);
 
     console.log('Database created successfully');
   } catch (error) {
