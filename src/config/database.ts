@@ -6,9 +6,9 @@ export const query = async (dbname: string, query: string, values: any[]) => {
       host: process.env.MYSQL_DATABASE_HOST || 'localhost',
       port: process.env.MYSQL_DATABASE_PORT
         ? parseInt(process.env.MYSQL_DATABASE_PORT)
-        : 3306,
+        : 3300,
       user: process.env.MYSQL_DATABASE_USER,
-      password: process.env.MYSQL_DATABASE_PASSWORD || '',
+      password: process.env.MYSQL_DATABASE_PASSWORD,
       database: dbname || 'ticketing',
     });
 

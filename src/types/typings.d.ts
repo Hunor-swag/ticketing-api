@@ -49,6 +49,6 @@ export type System = {
   name: string;
   slug: string;
   db_name: string;
-  description: string;
+  description?: string;
   created: Date;
 };

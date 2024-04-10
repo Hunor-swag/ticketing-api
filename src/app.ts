@@ -9,6 +9,7 @@ import issueRoutes from './routes/issueRoutes';
 import messageRoutes from './routes/messageRoutes';
 import emailRoutes from './routes/emailRoutes';
 import readReceiptRoutes from './routes/readReceiptRoutes';
+import systemRoutes from './routes/systemRoutes';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use('/issues', issueRoutes);
 app.use('/messages', messageRoutes);
 app.use('/emails', emailRoutes);
 app.use('/read-receipts', readReceiptRoutes);
+app.use('/systems', systemRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
