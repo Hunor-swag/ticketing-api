@@ -22,7 +22,7 @@ async function create(system: System): Promise<any> {
       ]
     );
 
-    const dumpFilename = 'dump.sql';
+    const dumpFilename = '/var/lib/mysql-files/dump.sql';
     await execAsync(
       `mysqldump --routines -u [username] -p[password] ticketing_schema > ${dumpFilename}`
     );
