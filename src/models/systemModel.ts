@@ -22,21 +22,22 @@ async function create(system: System): Promise<any> {
       ]
     );
 
-    console.log('hi');
+    const dumpFilename = 'dump.sql';
+    await execAsync(
+      `mysqldump --routines -u [username] -p[password] ticketing_schema > ${dumpFilename}`
+    );
 
-    const dumpResults = (await query(
-      'ticketing_schema',
-      'SHOW CREATE DATABASE ticketing_schema',
-      []
-    )) as RowDataPacket[];
-    const createDatabaseQuery = dumpResults[0]['Create Database'];
-    const dumpSql = `USE ticketing_schema; ${createDatabaseQuery};`;
-
-    // Create the new database for the system
+    // Create the destination database
     await query('', `CREATE DATABASE IF NOT EXISTS ${system.db_name}`, []);
 
-    // Import the SQL dump into the new database
-    await query(system.db_name, dumpSql, []);
+    // Read the dumped SQL file
+    const sql = fs.readFileSync(dumpFilename, 'utf8');
+
+    // Import the dumped SQL file into the destination database
+    await query(system.db_name, sql, []);
+
+    // Clean up the dumped SQL file
+    fs.unlinkSync(dumpFilename);
 
     console.log('Database created successfully');
   } catch (error) {
